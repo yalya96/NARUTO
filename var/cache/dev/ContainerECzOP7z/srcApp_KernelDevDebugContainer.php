@@ -1,6 +1,6 @@
 <?php
 
-namespace ContainerJqPnIFx;
+namespace ContainerECzOP7z;
 
 use Symfony\Component\DependencyInjection\Argument\RewindableGenerator;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -656,13 +656,17 @@ class srcApp_KernelDevDebugContainer extends Container
         $a->setEntityListenerResolver(new \Doctrine\Bundle\DoctrineBundle\Mapping\ContainerEntityListenerResolver($this));
         $a->setRepositoryFactory(new \Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory(new \Symfony\Component\DependencyInjection\Argument\ServiceLocator($this->getService, [
             'App\\Repository\\CompteRepository' => ['privates', 'App\\Repository\\CompteRepository', 'getCompteRepositoryService.php', true],
+            'App\\Repository\\DepotRepository' => ['privates', 'App\\Repository\\DepotRepository', 'getDepotRepositoryService.php', true],
             'App\\Repository\\PrestataireRepository' => ['privates', 'App\\Repository\\PrestataireRepository', 'getPrestataireRepositoryService.php', true],
             'App\\Repository\\ProfilRepository' => ['privates', 'App\\Repository\\ProfilRepository', 'getProfilRepositoryService.php', true],
+            'App\\Repository\\TarifsRepository' => ['privates', 'App\\Repository\\TarifsRepository', 'getTarifsRepositoryService.php', true],
             'App\\Repository\\UserRepository' => ['privates', 'App\\Repository\\UserRepository', 'getUserRepositoryService.php', true],
         ], [
             'App\\Repository\\CompteRepository' => '?',
+            'App\\Repository\\DepotRepository' => '?',
             'App\\Repository\\PrestataireRepository' => '?',
             'App\\Repository\\ProfilRepository' => '?',
+            'App\\Repository\\TarifsRepository' => '?',
             'App\\Repository\\UserRepository' => '?',
         ])));
 
@@ -772,6 +776,9 @@ class srcApp_KernelDevDebugContainer extends Container
         $instance->addListener('kernel.request', [0 => function () {
             return ($this->privates['api_platform.security.listener.request.deny_access'] ?? $this->getApiPlatform_Security_Listener_Request_DenyAccessService());
         }, 1 => 'onKernelRequest'], 1);
+        $instance->addListener('kernel.exception', [0 => function () {
+            return ($this->privates['App\\EventSubscriber\\ExceptionSubscriber'] ?? ($this->privates['App\\EventSubscriber\\ExceptionSubscriber'] = new \App\EventSubscriber\ExceptionSubscriber()));
+        }, 1 => 'onKernelException'], 0);
         $instance->addListener('kernel.response', [0 => function () {
             return ($this->privates['response_listener'] ?? ($this->privates['response_listener'] = new \Symfony\Component\HttpKernel\EventListener\ResponseListener('UTF-8')));
         }, 1 => 'onKernelResponse'], 0);

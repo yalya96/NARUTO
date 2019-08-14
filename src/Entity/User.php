@@ -56,7 +56,7 @@ class User implements UserInterface
     private $CNI;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $Statut;
 
@@ -85,10 +85,16 @@ class User implements UserInterface
      */
     private $image;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Prestataire", mappedBy="sys")
+     */
+    private $prestataires;
+
     public function __construct()
     {
         $this->comptes = new ArrayCollection();
         $this->depots = new ArrayCollection();
+        $this->prestataires = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -318,6 +324,37 @@ class User implements UserInterface
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Prestataire[]
+     */
+    public function getPrestataires(): Collection
+    {
+        return $this->prestataires;
+    }
+
+    public function addPrestataire(Prestataire $prestataire): self
+    {
+        if (!$this->prestataires->contains($prestataire)) {
+            $this->prestataires[] = $prestataire;
+            $prestataire->setSys($this);
+        }
+
+        return $this;
+    }
+
+    public function removePrestataire(Prestataire $prestataire): self
+    {
+        if ($this->prestataires->contains($prestataire)) {
+            $this->prestataires->removeElement($prestataire);
+            // set the owning side to null (unless already changed)
+            if ($prestataire->getSys() === $this) {
+                $prestataire->setSys(null);
+            }
+        }
 
         return $this;
     }

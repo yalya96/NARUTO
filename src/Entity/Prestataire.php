@@ -50,6 +50,12 @@ class Prestataire
      */
     private $users;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\User", inversedBy="prestataires")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $sys;
+
     public function __construct()
     {
         $this->comptes = new ArrayCollection();
@@ -167,6 +173,18 @@ class Prestataire
                 $user->setPrest(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSys(): ?User
+    {
+        return $this->sys;
+    }
+
+    public function setSys(?User $sys): self
+    {
+        $this->sys = $sys;
 
         return $this;
     }

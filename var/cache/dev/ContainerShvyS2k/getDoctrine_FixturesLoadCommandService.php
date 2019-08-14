@@ -17,10 +17,12 @@ include_once $this->targetDirs[3].'/vendor/doctrine/data-fixtures/lib/Doctrine/C
 include_once $this->targetDirs[3].'/vendor/doctrine/data-fixtures/lib/Doctrine/Common/DataFixtures/AbstractFixture.php';
 include_once $this->targetDirs[3].'/vendor/doctrine/doctrine-fixtures-bundle/ORMFixtureInterface.php';
 include_once $this->targetDirs[3].'/vendor/doctrine/doctrine-fixtures-bundle/Fixture.php';
+include_once $this->targetDirs[3].'/src/DataFixtures/All.php';
 include_once $this->targetDirs[3].'/src/DataFixtures/AppFixtures.php';
+include_once $this->targetDirs[3].'/src/DataFixtures/Tarif.php';
 
 $a = new \Doctrine\Bundle\FixturesBundle\Loader\SymfonyFixturesLoader($this);
-$a->addFixtures([0 => ['fixture' => new \App\DataFixtures\AppFixtures(), 'groups' => []]]);
+$a->addFixtures([0 => ['fixture' => new \App\DataFixtures\All(($this->services['security.password_encoder'] ?? $this->load('getSecurity_PasswordEncoderService.php'))), 'groups' => []], 1 => ['fixture' => new \App\DataFixtures\AppFixtures(), 'groups' => []], 2 => ['fixture' => new \App\DataFixtures\Tarif(), 'groups' => []]]);
 
 $this->privates['doctrine.fixtures_load_command'] = $instance = new \Doctrine\Bundle\FixturesBundle\Command\LoadDataFixturesDoctrineCommand($a, ($this->services['doctrine'] ?? $this->getDoctrineService()));
 

@@ -457,8 +457,18 @@
   </parameters>
   <services>
     <service id="service_container" class="Symfony\Component\DependencyInjection\ContainerInterface" public="true" synthetic="true"/>
+    <service id="App\DataFixtures\All" class="App\DataFixtures\All" autowire="true" autoconfigure="true">
+      <tag name="doctrine.fixture.orm"/>
+      <argument type="service" id="security.user_password_encoder.generic"/>
+    </service>
     <service id="App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" autoconfigure="true">
       <tag name="doctrine.fixture.orm"/>
+    </service>
+    <service id="App\DataFixtures\Tarif" class="App\DataFixtures\Tarif" autowire="true" autoconfigure="true">
+      <tag name="doctrine.fixture.orm"/>
+    </service>
+    <service id="App\EventSubscriber\ExceptionSubscriber" class="App\EventSubscriber\ExceptionSubscriber" autowire="true" autoconfigure="true">
+      <tag name="kernel.event_subscriber"/>
     </service>
     <service id="App\Repository\CompteRepository" class="App\Repository\CompteRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
@@ -473,6 +483,10 @@
       <argument type="service" id="doctrine"/>
     </service>
     <service id="App\Repository\ProfilRepository" class="App\Repository\ProfilRepository" autowire="true" autoconfigure="true">
+      <tag name="doctrine.repository_service"/>
+      <argument type="service" id="doctrine"/>
+    </service>
+    <service id="App\Repository\TarifsRepository" class="App\Repository\TarifsRepository" autowire="true" autoconfigure="true">
       <tag name="doctrine.repository_service"/>
       <argument type="service" id="doctrine"/>
     </service>
@@ -1566,6 +1580,14 @@
           <argument>onKernelRequest</argument>
         </argument>
         <argument>1</argument>
+      </call>
+      <call method="addListener">
+        <argument>kernel.exception</argument>
+        <argument type="collection">
+          <argument type="service" id="App\EventSubscriber\ExceptionSubscriber"/>
+          <argument>onKernelException</argument>
+        </argument>
+        <argument>0</argument>
       </call>
       <call method="addListener">
         <argument>kernel.response</argument>
@@ -2814,7 +2836,7 @@
       <factory class="Doctrine\ORM\EntityManager" method="create"/>
     </service>
     <service id="doctrine.orm.container_repository_factory" class="Doctrine\Bundle\DoctrineBundle\Repository\ContainerRepositoryFactory" public="false">
-      <argument type="service" id=".service_locator.NbxniWR"/>
+      <argument type="service" id=".service_locator.5aoPp6w"/>
     </service>
     <service id="doctrine.orm.manager_configurator.abstract" class="Doctrine\Bundle\DoctrineBundle\ManagerConfigurator" abstract="true">
       <argument type="collection"/>
@@ -4500,14 +4522,28 @@
       <call method="addFixtures">
         <argument type="collection">
           <argument type="collection">
+            <argument key="fixture" type="service" id="App\DataFixtures\All"/>
+            <argument key="groups" type="collection"/>
+          </argument>
+          <argument type="collection">
             <argument key="fixture" type="service" id="App\DataFixtures\AppFixtures"/>
+            <argument key="groups" type="collection"/>
+          </argument>
+          <argument type="collection">
+            <argument key="fixture" type="service" id="App\DataFixtures\Tarif"/>
             <argument key="groups" type="collection"/>
           </argument>
         </argument>
       </call>
     </service>
+    <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\All" class="App\DataFixtures\All" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\DataFixtures\All" class="App\DataFixtures\All" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\DataFixtures\AppFixtures" class="App\DataFixtures\AppFixtures" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\FixturesBundle\ORMFixtureInterface.0.App\DataFixtures\Tarif" class="App\DataFixtures\Tarif" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\DataFixtures\Tarif" class="App\DataFixtures\Tarif" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Symfony\Component\EventDispatcher\EventSubscriberInterface.0.App\EventSubscriber\ExceptionSubscriber" class="App\EventSubscriber\ExceptionSubscriber" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\EventSubscriber\ExceptionSubscriber" class="App\EventSubscriber\ExceptionSubscriber" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\CompteRepository" class="App\Repository\CompteRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\CompteRepository" class="App\Repository\CompteRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\DepotRepository" class="App\Repository\DepotRepository" autowire="true" abstract="true"/>
@@ -4516,6 +4552,8 @@
     <service id=".abstract.instanceof.App\Repository\PrestataireRepository" class="App\Repository\PrestataireRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\ProfilRepository" class="App\Repository\ProfilRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\ProfilRepository" class="App\Repository\ProfilRepository" autowire="true" autoconfigure="true" abstract="true"/>
+    <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\TarifsRepository" class="App\Repository\TarifsRepository" autowire="true" abstract="true"/>
+    <service id=".abstract.instanceof.App\Repository\TarifsRepository" class="App\Repository\TarifsRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id=".instanceof.Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepositoryInterface.0.App\Repository\UserRepository" class="App\Repository\UserRepository" autowire="true" abstract="true"/>
     <service id=".abstract.instanceof.App\Repository\UserRepository" class="App\Repository\UserRepository" autowire="true" autoconfigure="true" abstract="true"/>
     <service id="maker.auto_command.make_auth" class="Symfony\Bundle\MakerBundle\Command\MakerCommand" public="false">
@@ -4758,13 +4796,14 @@
         <argument key="doctrine.orm.default_listeners.attach_entity_listeners" type="service" id="doctrine.orm.default_listeners.attach_entity_listeners"/>
       </argument>
     </service>
-    <service id=".service_locator.NbxniWR" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
+    <service id=".service_locator.5aoPp6w" class="Symfony\Component\DependencyInjection\ServiceLocator" public="false">
       <tag name="container.service_locator"/>
       <argument type="collection">
         <argument key="App\Repository\CompteRepository" type="service" id="App\Repository\CompteRepository"/>
         <argument key="App\Repository\DepotRepository" type="service" id="App\Repository\DepotRepository"/>
         <argument key="App\Repository\PrestataireRepository" type="service" id="App\Repository\PrestataireRepository"/>
         <argument key="App\Repository\ProfilRepository" type="service" id="App\Repository\ProfilRepository"/>
+        <argument key="App\Repository\TarifsRepository" type="service" id="App\Repository\TarifsRepository"/>
         <argument key="App\Repository\UserRepository" type="service" id="App\Repository\UserRepository"/>
       </argument>
     </service>
