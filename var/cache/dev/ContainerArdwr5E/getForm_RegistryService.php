@@ -15,11 +15,17 @@ include_once $this->targetDirs[3].'/vendor/symfony/form/Extension/DataCollector/
 include_once $this->targetDirs[3].'/vendor/symfony/form/ResolvedFormTypeFactory.php';
 
 return $this->privates['form.registry'] = new \Symfony\Component\Form\FormRegistry([0 => new \Symfony\Component\Form\Extension\DependencyInjection\DependencyInjectionExtension(new \Symfony\Component\DependencyInjection\Argument\ServiceLocator($this->getService, [
+    'App\\Form\\PrestataireType' => ['privates', 'App\\Form\\PrestataireType', 'getPrestataireTypeService.php', true],
+    'App\\Form\\ProfilType' => ['privates', 'App\\Form\\ProfilType', 'getProfilTypeService.php', true],
+    'App\\Form\\UserType' => ['privates', 'App\\Form\\UserType', 'getUserTypeService.php', true],
     'Symfony\\Bridge\\Doctrine\\Form\\Type\\EntityType' => ['privates', 'form.type.entity', 'getForm_Type_EntityService.php', true],
     'Symfony\\Component\\Form\\Extension\\Core\\Type\\ChoiceType' => ['privates', 'form.type.choice', 'getForm_Type_ChoiceService.php', true],
     'Symfony\\Component\\Form\\Extension\\Core\\Type\\FileType' => ['services', 'form.type.file', 'getForm_Type_FileService.php', true],
     'Symfony\\Component\\Form\\Extension\\Core\\Type\\FormType' => ['privates', 'form.type.form', 'getForm_Type_FormService.php', true],
 ], [
+    'App\\Form\\PrestataireType' => '?',
+    'App\\Form\\ProfilType' => '?',
+    'App\\Form\\UserType' => '?',
     'Symfony\\Bridge\\Doctrine\\Form\\Type\\EntityType' => '?',
     'Symfony\\Component\\Form\\Extension\\Core\\Type\\ChoiceType' => '?',
     'Symfony\\Component\\Form\\Extension\\Core\\Type\\FileType' => '?',
