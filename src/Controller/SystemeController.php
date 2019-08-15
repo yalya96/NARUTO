@@ -2,8 +2,10 @@
 
 namespace App\Controller;
 
+use App\Entity\Prestataire;
 use App\Entity\Profil;
 use App\Entity\User;
+use App\Form\PrestataireType;
 use App\Form\ProfilType;
 use App\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,11 +15,14 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
+    /**
+     * @Route("/systeme", name="systeme")
+     */
 class SystemeController extends AbstractController
 {
 
     /**
-     * @Route("/systeme", name="systeme")
+     * @Route("/", name="systeme")
      */
     public function index()
     {
@@ -63,7 +68,6 @@ class SystemeController extends AbstractController
         $reception1=$request->request->all();
         $form1->submit($reception);
         $e=$reception1['libeller'];
-       // $e1=$reception1['password']="welcome";
         $repository = $this->getDoctrine()->getRepository(Profil::class);
         $rien = $repository->find($e);
         $a=$rien->getLibeller();
@@ -72,8 +76,6 @@ class SystemeController extends AbstractController
         $systeme->setPassword($passwordEncoder->encodePassword($systeme, "welcome"));
         $username=$reception['Prenom'][0].$reception['Prenom'][1].$reception['Nom'][0].$reception['Nom'][1].date('i').date('s');
         $systeme->setUsername($username);
-       // $password = $this->encoder->encodePassword($systeme, 'welcome');
-        //$systeme->setPassword($password);
         $file= $request->files->get('image');
         $extension=$file->guessExtension();
         $name=(md5(uniqid())).".".$extension;
@@ -93,7 +95,34 @@ class SystemeController extends AbstractController
      */
     public function addprest(Request $request,EntityManagerInterface $entityManagerInterface, UserPasswordEncoderInterface $passwordEncoder)
     {
-        
+        $a=$this->getUser();
+        $id=$a->getId();
+        var_dump($id);die();
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+        $form->handleRequest($request);
+        $reception=$request->request->all();
+        $form->submit($reception);
+        $profil= new Profil(); 
+        $form1 = $this->createForm(ProfilType::class, $profil);
+        $form1->handleRequest($request);
+        $reception1=$request->request->all();
+        $form1->submit($reception1);
+        $prestataire= new Prestataire(); 
+        $form2 = $this->createForm(PrestataireType::class, $prestataire);
+        $form2->handleRequest($request);
+        $reception2=$request->request->all();
+        $form2->submit($reception2);
+
+        $entityManagerInterface->persist($user);
+        $entityManagerInterface->persist($prestataire);
+        $entityManagerInterface->flush();
+        $data = [
+            'status' => 201,
+            'message' => 'merci'
+            ];
+    return new JsonResponse($data, 201);
+
     }
     function controleprofil($test)
     {
@@ -116,5 +145,16 @@ class SystemeController extends AbstractController
             }
         }
         return $yaya;
+    }
+    function numerocompte()
+    {
+        $jour = date('d');
+        $mois = date('m');
+        $annee = date('Y');
+        $heure = date('H');
+        $minute = date('i');
+        $seconde = date('s');
+        $test=$seconde.$minute.$heure.$annee.$mois.$jour;
+        return $test;
     }
 }

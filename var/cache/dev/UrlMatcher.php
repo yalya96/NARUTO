@@ -13,10 +13,16 @@ return [
         '/_profiler/search_bar' => [[['_route' => '_profiler_search_bar', '_controller' => 'web_profiler.controller.profiler::searchBarAction'], null, null, null, false, false, null]],
         '/_profiler/phpinfo' => [[['_route' => '_profiler_phpinfo', '_controller' => 'web_profiler.controller.profiler::phpinfoAction'], null, null, null, false, false, null]],
         '/_profiler/open' => [[['_route' => '_profiler_open_file', '_controller' => 'web_profiler.controller.profiler::openAction'], null, null, null, false, false, null]],
+        '/auth' => [[['_route' => 'authentificationauthentification', '_controller' => 'App\\Controller\\AuthentificationController::index'], null, null, null, true, false, null]],
+        '/auth/login' => [
+            [['_route' => 'authentificationlogin', '_controller' => 'App\\Controller\\AuthentificationController::login'], null, ['POST' => 0], null, false, false, null],
+            [['_route' => 'auth_login'], null, null, null, false, false, null],
+        ],
         '/prestataire' => [[['_route' => 'prestataire', '_controller' => 'App\\Controller\\PrestataireController::index'], null, null, null, false, false, null]],
-        '/systeme' => [[['_route' => 'systeme', '_controller' => 'App\\Controller\\SystemeController::index'], null, null, null, false, false, null]],
-        '/profil' => [[['_route' => 'app_systeme_addprofil', '_controller' => 'App\\Controller\\SystemeController::addprofil'], null, null, null, false, false, null]],
-        '/ajoutsysteme' => [[['_route' => 'app_systeme_addsys', '_controller' => 'App\\Controller\\SystemeController::addsys'], null, null, null, false, false, null]],
+        '/systeme' => [[['_route' => 'systemesysteme', '_controller' => 'App\\Controller\\SystemeController::index'], null, null, null, true, false, null]],
+        '/systeme/profil' => [[['_route' => 'systemeapp_systeme_addprofil', '_controller' => 'App\\Controller\\SystemeController::addprofil'], null, null, null, false, false, null]],
+        '/systeme/ajoutsysteme' => [[['_route' => 'systemeapp_systeme_addsys', '_controller' => 'App\\Controller\\SystemeController::addsys'], null, null, null, false, false, null]],
+        '/systeme/ajoutprestataire' => [[['_route' => 'systemeapp_systeme_addprest', '_controller' => 'App\\Controller\\SystemeController::addprest'], null, null, null, false, false, null]],
     ],
     [ // $regexpList
         0 => '{^(?'
