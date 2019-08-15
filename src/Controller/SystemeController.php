@@ -11,11 +11,11 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\PasswordEncoderInterface;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class SystemeController extends AbstractController
 {
+
     /**
      * @Route("/systeme", name="systeme")
      */
@@ -38,16 +38,14 @@ class SystemeController extends AbstractController
         $nom=$reception['libeller'];
         $nom=$this->controleprofil($nom);
         $nom=strtoupper($nom);
-        //$nom='["ROLE_'.$nom.'"]';
         $profil->setLibeller($nom);
-
-            $entityManagerInterface->persist($profil);
-            $entityManagerInterface->flush();
-            $data = [
+        $entityManagerInterface->persist($profil);
+        $entityManagerInterface->flush();
+        $data = [
                 'status' => 201,
                 'message' => 'merci'
-            ];
-            return new JsonResponse($data, 201);
+                ];
+        return new JsonResponse($data, 201);
     }
     /**
      * @Route("/ajoutsysteme")
@@ -65,15 +63,17 @@ class SystemeController extends AbstractController
         $reception1=$request->request->all();
         $form1->submit($reception);
         $e=$reception1['libeller'];
+       // $e1=$reception1['password']="welcome";
         $repository = $this->getDoctrine()->getRepository(Profil::class);
-       // $rien = $repository->findOneBy(['libeller' => $e]);
         $rien = $repository->find($e);
         $a=$rien->getLibeller();
-        //var_dump(gettype(["ROLE_'.$a.'"]));die();
         $systeme->setRoles(["ROLE_$a"]);
         $systeme->setStatut("ACTIF");
         $systeme->setPassword($passwordEncoder->encodePassword($systeme, "welcome"));
-       // $image=$request->file()->get('image');
+        $username=$reception['Prenom'][0].$reception['Prenom'][1].$reception['Nom'][0].$reception['Nom'][1].date('i').date('s');
+        $systeme->setUsername($username);
+       // $password = $this->encoder->encodePassword($systeme, 'welcome');
+        //$systeme->setPassword($password);
         $file= $request->files->get('image');
         $extension=$file->guessExtension();
         $name=(md5(uniqid())).".".$extension;
@@ -81,7 +81,18 @@ class SystemeController extends AbstractController
         $systeme->setImage($name);
         $entityManagerInterface->persist($systeme);
         $entityManagerInterface->flush();
-        //var_dump($file->guessExtension());die();
+        $data = [
+            'status' => 201,
+            'message' => 'merci'
+            ];
+    return new JsonResponse($data, 201);
+        
+    }
+    /**
+     * @Route("/ajoutprestataire")
+     */
+    public function addprest(Request $request,EntityManagerInterface $entityManagerInterface, UserPasswordEncoderInterface $passwordEncoder)
+    {
         
     }
     function controleprofil($test)
